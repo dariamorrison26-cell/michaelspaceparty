@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="You're invited to Michael's 4th Birthday — a cosmic celebration among the stars!">
+  <meta name="theme-color" content="#0b0d1a">
+  <title>Michael's 4th Birthday — Space Mission Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    /* ═══════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════ */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #06070e;
+      color: #e8e6f0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ═══════════════════════════════════════
+   SPACE BACKGROUND — LAYERED DEEP FIELD
+   ═══════════════════════════════════════ */
+    .space-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse at 20% 50%, #0f1129 0%, #06070e 60%),
+        radial-gradient(ellipse at 80% 20%, #110e24 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 100%, #0a0f2e 0%, transparent 40%),
+        #06070e;
+    }
+
+    /* Nebula glow overlays */
+    .nebula {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.12;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .nebula-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #1a5bba, transparent 70%);
+      top: -10%;
+      left: -10%;
+      animation: nebulaFloat 30s ease-in-out infinite;
+    }
+
+    .nebula-2 {
+      width: 500px;
+      height: 400px;
+      background: radial-gradient(circle, #2a4494, transparent 70%);
+      bottom: -5%;
+      right: -8%;
+      animation: nebulaFloat 25s ease-in-out infinite reverse;
+    }
+
+    .nebula-3 {
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, #1a6b5a, transparent 70%);
+      top: 40%;
+      right: 10%;
+      animation: nebulaFloat 35s ease-in-out infinite 5s;
+    }
+
+    @keyframes nebulaFloat {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      33% {
+        transform: translate(30px, -20px) scale(1.05);
+      }
+
+      66% {
+        transform: translate(-20px, 15px) scale(0.95);
+      }
+    }
+
+    /* ═══════════════════════════════════════
+   STAR LAYERS — PARALLAX DEPTH
+   ═══════════════════════════════════════ */
+    .stars-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Stars are generated via JS into canvas */
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════
+   TWINKLING STAR POINTS (CSS)
+   ═══════════════════════════════════════ */
+    .twinkle-star {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: 0.2;
+        transform: scale(0.8);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+    }
+
+    @keyframes twinkleAlt {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+
+      40% {
+        opacity: 0.8;
+        transform: scale(1.3);
+      }
+
+      70% {
+        opacity: 0.1;
+        transform: scale(0.7);
+      }
+    }
+
+    /* ═══════════════════════════════════════
+   PLANETS — ILLUSTRATED IMAGE SPRITES
+   ═══════════════════════════════════════ */
+    .planet-img {
+      position: fixed;
+      z-index: 2;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      filter: brightness(1.1) contrast(1.05);
+      object-fit: contain;
+    }
+
+    .planet-saturn {
+      width: 378px;
+      bottom: -40px;
+      left: 10px;
+      animation: planetBob 22s ease-in-out infinite;
+    }
+
+    .planet-moon {
+      width: 77px;
+      top: 18%;
+      left: 10%;
+      animation: planetBob 15s ease-in-out infinite 3s;
+    }
+
+    .planet-jupiter {
+      width: 294px;
+      top: 3%;
+      right: 15%;
+      animation: planetBob 20s ease-in-out infinite 1s;
+    }
+
+    .planet-mars {
+      width: 70px;
+      top: 38%;
+      right: 3%;
+      animation: planetBob 18s ease-in-out infinite 5s;
+    }
+
+    .planet-earth {
+      width: 140px;
+      bottom: 6%;
+      right: 8%;
+      animation: planetBob 16s ease-in-out infinite 2s;
+    }
+
+    .planet-venus {
+      width: 90px;
+      top: 52%;
+      left: 8%;
+      animation: planetBob 19s ease-in-out infinite 4s;
+    }
+
+    @keyframes planetBob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-14px);
+      }
+    }
+
+
+
+    /* ═══════════════════════════════════════
+   3D ROCKET — THREE.JS CANVAS
+   ═══════════════════════════════════════ */
+    #rocket-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* Fire particles — cartoon flame teardrops */
+    .fire-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 4;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      filter: blur(0.5px);
+      animation: flame-flicker 0.1s ease-in-out infinite alternate;
+    }
+
+    @keyframes flame-flicker {
+      0% {
+        transform: scale(1) rotate(var(--rot));
+      }
+
+      100% {
+        transform: scale(0.85, 1.15) rotate(var(--rot));
+      }
+    }
+
+    /* ═══════════════════════════════════════
+   ASTEROIDS
+   ═══════════════════════════════════════ */
+    .asteroid {
+      position: fixed;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0;
+      border-radius: 40% 60% 55% 45% / 50% 40% 60% 50%;
+    }
+
+    @keyframes asteroidDrift {
+      0% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+
+      5% {
+        opacity: 0.6;
+      }
+
+      90% {
+        opacity: 0.6;
+      }
+
+      100% {
+        transform: translateX(calc(-100vw - 100px)) translateY(120px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* ═══════════════════════════════════════
+   SHOOTING STAR
+   ═══════════════════════════════════════ */
+    .shooting-star {
+      position: fixed;
+      z-index: 4;
+      width: 3px;
+      height: 3px;
+      background: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.3);
+    }
+
+    .shooting-star::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 100%;
+      transform: translateY(-50%);
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(to left, rgba(255, 255, 255, 0.6), transparent);
+    }
+
+    @keyframes shootingStar {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0);
+      }
+
+      5% {
+        opacity: 1;
+      }
+
+      70% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-400px, 250px);
+      }
+    }
+
+    /* ═══════════════════════════════════════
+   MAIN CONTENT
+   ═══════════════════════════════════════ */
+    .content-wrapper {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    @media (max-height: 850px) {
+      .content-wrapper {
+        transform: scale(0.85);
+        transform-origin: center;
+      }
+    }
+
+    @media (max-height: 650px) {
+      .content-wrapper {
+        transform: scale(0.7);
+        transform-origin: center;
+      }
+    }
+
+    @media (max-height: 500px) {
+      .content-wrapper {
+        transform: scale(0.55);
+        transform-origin: center;
+      }
+    }
+
+    /* Age badge */
+    .age-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1a5bba 0%, #103b7a 100%);
+      box-shadow: 0 4px 15px rgba(16, 59, 122, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      margin-bottom: 24px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      animation: badgePulse 3s ease-in-out infinite;
+      position: relative;
+    }
+
+    .age-badge::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid rgba(26, 91, 186, 0.3);
+      animation: badgeRing 3s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes badgeRing {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: scale(1.15);
+        opacity: 0;
+      }
+    }
+
+    /* Pre-heading */
+    .pre-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #93c5fd;
+      margin-bottom: 12px;
+    }
+
+    /* Main heading */
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(36px, 8vw, 72px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+      background: linear-gradient(180deg, #ffffff 0%, #dbeafe 50%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 15px rgba(96, 165, 250, 0.4)) drop-shadow(0 0 30px rgba(59, 130, 246, 0.2));
+    }
+
+    .heading-accent {
+      display: block;
+      font-size: clamp(42px, 10vw, 88px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #e0f2fe 0%, #38bdf8 40%, #0284c7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 10px rgba(56, 189, 248, 0.2));
+    }
+
+    /* Subheading */
+    .subheading {
+      font-size: clamp(16px, 3vw, 22px);
+      font-weight: 300;
+      color: rgba(220, 230, 245, 0.7);
+      max-width: 460px;
+      line-height: 1.6;
+      margin: 8px auto 8px;
+    }
+
+    /* Event details */
+    .event-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      justify-content: center;
+      margin: 16px 0 24px;
+    }
+
+    .detail-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      /* Holographic card aesthetic */
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 40%, rgba(255, 255, 255, 0.03) 60%, rgba(130, 200, 255, 0.1) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-right-color: rgba(255, 255, 255, 0.05);
+      border-bottom-color: rgba(255, 255, 255, 0.05);
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .detail-chip .icon {
+      font-size: 16px;
+      opacity: 1;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+    }
+
+    /* CTA Button */
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 40px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(135deg, #1a5bba 0%, #347deb 100%);
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 25px rgba(26, 91, 186, 0.4),
+        0 0 60px rgba(26, 91, 186, 0.15);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 35px rgba(26, 91, 186, 0.55),
+        0 0 80px rgba(26, 91, 186, 0.25);
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 0.15) 0%, transparent 50%, transparent 100%);
+      border-radius: inherit;
+    }
+
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200%;
+      height: 200%;
+      transform: translate(-50%, -50%) scale(0);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 70%);
+      border-radius: 50%;
+      transition: transform 0.5s ease;
+    }
+
+    .cta-button:hover::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .cta-rocket-icon {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .cta-button:hover .cta-rocket-icon {
+      transform: translateX(3px) translateY(-3px);
+    }
+
+    /* Footer note */
+    .footer-note {
+      margin-top: 40px;
+      font-size: 13px;
+      color: rgba(180, 170, 200, 0.35);
+      letter-spacing: 1px;
+    }
+
+    /* ═══════════════════════════════════════
+   FLOATING PARTICLES (ambient dust)
+   ═══════════════════════════════════════ */
+    .space-dust {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .dust-particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(200, 190, 230, 0.3);
+      border-radius: 50%;
+    }
+
+    @keyframes dustFloat {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.5;
+      }
+
+      90% {
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: translateY(-100vh) translateX(40px);
+        opacity: 0;
+      }
+    }
+
+    /* ═══════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════ */
+    @media (max-width: 600px) {
+      .content-wrapper {
+        padding: 60px 20px 40px;
+      }
+
+      .age-badge {
+        width: 64px;
+        height: 64px;
+        font-size: 28px;
+      }
+
+      .pre-heading {
+        font-size: 12px;
+        letter-spacing: 3px;
+      }
+
+      .cta-button {
+        padding: 16px 32px;
+        font-size: 15px;
+      }
+
+      .planet-large {
+        width: 180px;
+        height: 180px;
+        bottom: -40px;
+        left: -60px;
+      }
+
+      .planet-small {
+        width: 35px;
+        height: 35px;
+        top: 10%;
+        right: 5%;
+      }
+
+      .moon {
+        width: 25px;
+        height: 25px;
+        top: 18%;
+        left: 8%;
+      }
+
+      .event-details {
+        gap: 8px 16px;
+      }
+
+      .detail-chip {
+        font-size: 13px;
+        padding: 6px 14px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      h1 {
+        font-size: 32px;
+      }
+
+      .heading-accent {
+        font-size: 38px;
+      }
+    }
+
+    /* ═══════════════════════════════════════
+   SMOOTH ENTRANCE
+   ═══════════════════════════════════════ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .fade-in:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .fade-in:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    .fade-in:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    .fade-in:nth-child(4) {
+      animation-delay: 0.8s;
+    }
+
+    .fade-in:nth-child(5) {
+      animation-delay: 1.0s;
+    }
+
+    .fade-in:nth-child(6) {
+      animation-delay: 1.2s;
+    }
+
+    .fade-in:nth-child(7) {
+      animation-delay: 1.4s;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Accessibility: reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- BACKGROUND LAYERS -->
+  <div class="space-bg"></div>
+  <div class="nebula nebula-1"></div>
+  <div class="nebula nebula-2"></div>
+  <div class="nebula nebula-3"></div>
+
+  <!-- STARFIELD CANVAS -->
+  <canvas id="starfield"></canvas>
+
+  <!-- TWINKLING STARS (generated by JS) -->
+  <div id="twinkle-container"></div>
+
+  <!-- SPACE DUST -->
+  <div class="space-dust" id="dust-container"></div>
+
+  <!-- PLANETS (illustrated sprites) -->
+  <img src="saturn.png" alt="" class="planet-img planet-saturn" />
+  <img src="moon.png" alt="" class="planet-img planet-moon" />
+  <img src="jupiter.png" alt="" class="planet-img planet-jupiter" />
+  <img src="earth.png" alt="" class="planet-img planet-earth" />
+  <img src="venus.png" alt="" class="planet-img planet-venus" />
+  <img src="mars.png" alt="" class="planet-img planet-mars" />
+
+  <!-- ASTEROIDS (generated by JS) -->
+  <div id="asteroid-container"></div>
+
+  <!-- SHOOTING STARS -->
+  <div id="shooting-star-container"></div>
+
+  <!-- 3D ROCKET (Three.js canvas) -->
+  <canvas id="rocket-canvas"></canvas>
+
+  <!-- MAIN CONTENT -->
+  <main class="content-wrapper">
+    <div class="age-badge fade-in">4</div>
+    <p class="pre-heading fade-in">You're Invited to a Cosmic Celebration</p>
+    <h1 class="fade-in">
+      Michael is Turning
+      <span class="heading-accent">Four!</span>
+    </h1>
+    <p class="subheading fade-in" style="text-align: center;">
+      Suit up, little astronaut — we're launching a birthday mission to the stars.<br/>
+      Cake, games, and zero gravity fun await!
+    </p>
+    <div class="event-details fade-in">
+      <span class="detail-chip"><span class="icon">📅</span> Saturday, May 17th</span>
+      <span class="detail-chip"><span class="icon">🕐</span> 2:00 PM – 5:00 PM</span>
+      <span class="detail-chip"><span class="icon">📍</span> Mission Control TBD</span>
+    </div>
+    <a href="https://example.com/rsvp" class="cta-button fade-in" id="rsvp-button" target="_blank" rel="noopener">
+      RSVP to the Mission
+      <span class="cta-rocket-icon">🚀</span>
+    </a>
+  </main>
+
+  <script>
+    /* ═══════════════════════════════════════
+       STARFIELD — CANVAS PARALLAX
+       ═══════════════════════════════════════ */
+    (function () {
+      const canvas = document.getElementById('starfield');
+      const ctx = canvas.getContext('2d');
+      let w, h;
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      // Generate star layers with different speeds (parallax)
+      const layers = [
+        { count: 120, speed: 0.02, sizeRange: [0.3, 1.0], alpha: 0.4 },
+        { count: 80, speed: 0.05, sizeRange: [0.5, 1.5], alpha: 0.6 },
+        { count: 40, speed: 0.1, sizeRange: [1.0, 2.0], alpha: 0.8 },
+      ];
+
+      const stars = [];
+
+      layers.forEach(layer => {
+        for (let i = 0; i < layer.count; i++) {
+          stars.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            size: layer.sizeRange[0] + Math.random() * (layer.sizeRange[1] - layer.sizeRange[0]),
+            speed: layer.speed + Math.random() * layer.speed * 0.5,
+            alpha: layer.alpha * (0.5 + Math.random() * 0.5),
+            twinkleSpeed: 0.005 + Math.random() * 0.01,
+            twinklePhase: Math.random() * Math.PI * 2,
+          });
+        }
+      });
+
+      let time = 0;
+
+      function drawStars() {
+        ctx.clearRect(0, 0, w, h);
+        time += 0.016;
+
+        stars.forEach(s => {
+          // Subtle horizontal drift
+          s.x -= s.speed;
+          if (s.x < -5) {
+            s.x = w + 5;
+            s.y = Math.random() * h;
+          }
+
+          // Twinkle
+          const twinkle = 0.5 + 0.5 * Math.sin(time * s.twinkleSpeed * 60 + s.twinklePhase);
+          const alpha = s.alpha * (0.4 + 0.6 * twinkle);
+
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(230, 225, 255, ${alpha})`;
+          ctx.fill();
+
+          // Glow for larger stars
+          if (s.size > 1.2) {
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size * 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(200, 190, 255, ${alpha * 0.15})`;
+            ctx.fill();
+          }
+        });
+
+        requestAnimationFrame(drawStars);
+      }
+      drawStars();
+    })();
+
+    /* ═══════════════════════════════════════
+       TWINKLING HIGHLIGHT STARS
+       ═══════════════════════════════════════ */
+    (function () {
+      const container = document.getElementById('twinkle-container');
+      const colors = [
+        'rgba(200, 190, 255, 0.9)',
+        'rgba(255, 230, 180, 0.8)',
+        'rgba(180, 220, 255, 0.9)',
+        'rgba(255, 200, 200, 0.7)',
+      ];
+
+      for (let i = 0; i < 25; i++) {
+        const star = document.createElement('div');
+        star.className = 'twinkle-star';
+        const size = 2 + Math.random() * 3;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const dur = 2 + Math.random() * 4;
+        const delay = Math.random() * 5;
+
+        star.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      background: ${color};
+      box-shadow: 0 0 ${size * 3}px ${color};
+      animation: ${Math.random() > 0.5 ? 'twinkle' : 'twinkleAlt'} ${dur}s ease-in-out ${delay}s infinite;
+    `;
+        container.appendChild(star);
+      }
+    })();
+
+    /* ═══════════════════════════════════════
+       SPACE DUST
+       ═══════════════════════════════════════ */
+    (function () {
+      const container = document.getElementById('dust-container');
+
+      for (let i = 0; i < 30; i++) {
+        const p = document.createElement('div');
+        p.className = 'dust-particle';
+        const dur = 15 + Math.random() * 25;
+        const delay = Math.random() * 20;
+        const x = Math.random() * 100;
+
+        p.style.cssText = `
+      left: ${x}%;
+      bottom: -10px;
+      animation: dustFloat ${dur}s linear ${delay}s infinite;
+      opacity: ${0.2 + Math.random() * 0.3};
+      width: ${1 + Math.random() * 2}px;
+      height: ${1 + Math.random() * 2}px;
+    `;
+        container.appendChild(p);
+      }
+    })();
+
+    /* ═══════════════════════════════════════
+       ASTEROIDS
+       ═══════════════════════════════════════ */
+    (function () {
+      const container = document.getElementById('asteroid-container');
+      const asteroidColors = [
+        'linear-gradient(135deg, #5a5060 0%, #3a3040 60%, #2a2030 100%)',
+        'linear-gradient(135deg, #6a6578 0%, #4a4558 60%, #33303e 100%)',
+        'linear-gradient(135deg, #7a706a 0%, #5a504a 60%, #3a3530 100%)',
+      ];
+
+      function createAsteroid() {
+        const el = document.createElement('div');
+        el.className = 'asteroid';
+
+        const size = 8 + Math.random() * 28;
+        const y = 5 + Math.random() * 80;
+        const dur = 25 + Math.random() * 35;
+        const delay = Math.random() * 15;
+        const grad = asteroidColors[Math.floor(Math.random() * asteroidColors.length)];
+        const borderRadius = `${30 + Math.random() * 30}% ${40 + Math.random() * 30}% ${35 + Math.random() * 30}% ${45 + Math.random() * 25}% / ${40 + Math.random() * 20}% ${35 + Math.random() * 30}% ${45 + Math.random() * 25}% ${40 + Math.random() * 30}%`;
+
+        el.style.cssText = `
+      width: ${size}px; height: ${size * (0.7 + Math.random() * 0.5)}px;
+      top: ${y}%;
+      right: -50px;
+      background: ${grad};
+      border-radius: ${borderRadius};
+      box-shadow: inset -${size * 0.15}px -${size * 0.1}px ${size * 0.3}px rgba(0,0,0,0.5);
+      animation: asteroidDrift ${dur}s linear ${delay}s infinite;
+    `;
+
+        // Surface details
+        if (size > 15) {
+          const crater = document.createElement('div');
+          crater.style.cssText = `
+        position: absolute;
+        width: ${size * 0.25}px; height: ${size * 0.25}px;
+        top: ${20 + Math.random() * 30}%; left: ${20 + Math.random() * 40}%;
+        background: rgba(0,0,0,0.2);
+        border-radius: 50%;
+      `;
+          el.appendChild(crater);
+        }
+
+        container.appendChild(el);
+      }
+
+      for (let i = 0; i < 6; i++) createAsteroid();
+    })();
+
+    /* ═══════════════════════════════════════
+       SHOOTING STARS
+       ═══════════════════════════════════════ */
+    (function () {
+      const container = document.getElementById('shooting-star-container');
+
+      function createShootingStar() {
+        const star = document.createElement('div');
+        star.className = 'shooting-star';
+
+        const startX = 30 + Math.random() * 60;
+        const startY = 5 + Math.random() * 40;
+        const dur = 1.5 + Math.random() * 1;
+        const angle = -25 + Math.random() * 10;
+
+        star.style.cssText = `
+      left: ${startX}%;
+      top: ${startY}%;
+      animation: shootingStar ${dur}s linear forwards;
+      transform: rotate(${angle}deg);
+    `;
+
+        container.appendChild(star);
+        setTimeout(() => star.remove(), dur * 1000 + 100);
+      }
+
+      // Random shooting stars
+      function scheduleNext() {
+        const wait = 4000 + Math.random() * 8000;
+        setTimeout(() => {
+          createShootingStar();
+          scheduleNext();
+        }, wait);
+      }
+      // First one after a short delay
+      setTimeout(createShootingStar, 3000);
+      scheduleNext();
+    })();
+
+    /* ═══════════════════════════════════════
+       3D ROCKET — THREE.JS REAL 3D GEOMETRY
+       ═══════════════════════════════════════ */
+    (function () {
+      // ---- THREE.JS SCENE SETUP ----
+      const canvas = document.getElementById('rocket-canvas');
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(0, 0, 18);
+
+      // ---- LIGHTING ----
+      const ambientLight = new THREE.AmbientLight(0x4466aa, 0.6);
+      scene.add(ambientLight);
+
+      const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+      keyLight.position.set(3, 5, 8);
+      scene.add(keyLight);
+
+      const fillLight = new THREE.DirectionalLight(0x6688cc, 0.4);
+      fillLight.position.set(-3, -2, 4);
+      scene.add(fillLight);
+
+      const rimLight = new THREE.PointLight(0xff6633, 0.8, 20);
+      rimLight.position.set(0, -5, 3);
+      scene.add(rimLight);
+
+      // ---- BUILD ROCKET GROUP ----
+      const rocketGroup = new THREE.Group();
+
+      // Materials
+      const bodyMat = new THREE.MeshStandardMaterial({
+        color: 0xe8e8ee, metalness: 0.6, roughness: 0.25
+      });
+      const noseMat = new THREE.MeshStandardMaterial({
+        color: 0xe63946, metalness: 0.4, roughness: 0.3
+      });
+      const finMat = new THREE.MeshStandardMaterial({
+        color: 0xcc2936, metalness: 0.4, roughness: 0.35
+      });
+      const windowRimMat = new THREE.MeshStandardMaterial({
+        color: 0x556677, metalness: 0.8, roughness: 0.2
+      });
+      const windowGlassMat = new THREE.MeshStandardMaterial({
+        color: 0x44aaff, metalness: 0.1, roughness: 0.1,
+        emissive: 0x2266aa, emissiveIntensity: 0.6
+      });
+      const nozzleMat = new THREE.MeshStandardMaterial({
+        color: 0x3a3a4a, metalness: 0.8, roughness: 0.3
+      });
+      const bandMat = new THREE.MeshStandardMaterial({
+        color: 0xe63946, metalness: 0.3, roughness: 0.4,
+        emissive: 0x991122, emissiveIntensity: 0.15
+      });
+
+      // Fuselage (cylinder)
+      const bodyGeo = new THREE.CylinderGeometry(0.85, 0.9, 3.2, 32);
+      const body = new THREE.Mesh(bodyGeo, bodyMat);
+      rocketGroup.add(body);
+
+      // Red band
+      const bandGeo = new THREE.CylinderGeometry(0.91, 0.92, 0.35, 32);
+      const band = new THREE.Mesh(bandGeo, bandMat);
+      band.position.y = -0.8;
+      rocketGroup.add(band);
+
+      // Nose cone
+      const noseGeo = new THREE.ConeGeometry(0.85, 1.6, 32);
+      const nose = new THREE.Mesh(noseGeo, noseMat);
+      nose.position.y = 2.4;
+      rocketGroup.add(nose);
+
+      // Window rim (torus)
+      const rimGeo = new THREE.TorusGeometry(0.32, 0.06, 16, 32);
+      const rim = new THREE.Mesh(rimGeo, windowRimMat);
+      rim.position.set(0, 0.6, 0.82);
+      rocketGroup.add(rim);
+
+      // Window glass (sphere)
+      const glassGeo = new THREE.SphereGeometry(0.28, 32, 32);
+      const glass = new THREE.Mesh(glassGeo, windowGlassMat);
+      glass.position.set(0, 0.6, 0.85);
+      rocketGroup.add(glass);
+
+      // Window reflection highlight
+      const reflectMat = new THREE.MeshBasicMaterial({
+        color: 0xffffff, transparent: true, opacity: 0.5
+      });
+      const reflectGeo = new THREE.SphereGeometry(0.08, 16, 16);
+      const reflect = new THREE.Mesh(reflectGeo, reflectMat);
+      reflect.position.set(-0.08, 0.7, 0.98);
+      rocketGroup.add(reflect);
+
+      // Exhaust nozzle
+      const nozzleGeo = new THREE.CylinderGeometry(0.55, 0.4, 0.5, 32);
+      const nozzle = new THREE.Mesh(nozzleGeo, nozzleMat);
+      nozzle.position.y = -1.85;
+      rocketGroup.add(nozzle);
+
+      // Inner nozzle glow
+      const innerNozzleMat = new THREE.MeshBasicMaterial({
+        color: 0xff6600, transparent: true, opacity: 0.6
+      });
+      const innerNozzleGeo = new THREE.CylinderGeometry(0.35, 0.25, 0.3, 32);
+      const innerNozzle = new THREE.Mesh(innerNozzleGeo, innerNozzleMat);
+      innerNozzle.position.y = -2.0;
+      rocketGroup.add(innerNozzle);
+
+      // Fins (4 fins at 90° intervals for perfect symmetry)
+      function createFin(angleRad) {
+        const shape = new THREE.Shape();
+        shape.moveTo(0, 0);
+        shape.lineTo(0.9, -0.5); // Sweeps out dynamically
+        shape.lineTo(0.9, -1.2); // Flat outer vertical edge
+        shape.lineTo(0, -1.0);   // Sweeps back towards body
+        shape.closePath();
+
+        const extrudeSettings = { depth: 0.04, bevelEnabled: true, bevelThickness: 0.015, bevelSize: 0.015, bevelSegments: 3 };
+        const finGeo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        
+        // Center the extrusion thickness on the local Z axis
+        finGeo.translate(0, 0, -0.02);
+
+        const fin = new THREE.Mesh(finGeo, finMat);
+        
+        // Rotate -90 degrees so the drawn shape (+X) extends out radially (+Z) 
+        // instead of tangentially
+        fin.rotation.y = -Math.PI / 2;
+        
+        // Sink base slightly into body (r=0.83 instead of 0.85) to avoid visual disconnect
+        fin.position.set(0, -0.6, 0.83); 
+        
+        // Create pivot group to perfectly array the fins around the central Y-axis
+        const pivot = new THREE.Group();
+        pivot.rotation.y = angleRad;
+        pivot.add(fin);
+        
+        return pivot;
+      }
+
+      rocketGroup.add(createFin(0));
+      rocketGroup.add(createFin(Math.PI / 2));
+      rocketGroup.add(createFin(Math.PI));
+      rocketGroup.add(createFin(Math.PI * 3 / 2));
+
+      // Panel lines (thin rings)
+      const panelMat = new THREE.MeshBasicMaterial({ color: 0x999999, transparent: true, opacity: 0.3 });
+      [0.8, -0.2, -1.2].forEach(yPos => {
+        const ringGeo = new THREE.TorusGeometry(0.88, 0.01, 8, 64);
+        const ring = new THREE.Mesh(ringGeo, panelMat);
+        ring.position.y = yPos;
+        ring.rotation.x = Math.PI / 2;
+        rocketGroup.add(ring);
+      });
+
+      // Rivets
+      const rivetMat = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, metalness: 0.9, roughness: 0.2 });
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2;
+        const rivetGeo = new THREE.SphereGeometry(0.03, 8, 8);
+        const rivet = new THREE.Mesh(rivetGeo, rivetMat);
+        rivet.position.set(Math.sin(a) * 0.88, 0.8, Math.cos(a) * 0.88);
+        rocketGroup.add(rivet);
+      }
+
+      // Fire exhaust (3D cone of light)
+      const fireMat = new THREE.MeshBasicMaterial({
+        color: 0xff6600, transparent: true, opacity: 0.7
+      });
+      const fireGeo = new THREE.ConeGeometry(0.35, 1.8, 16, 1, true);
+      const fire = new THREE.Mesh(fireGeo, fireMat);
+      fire.position.y = -2.8;
+      fire.rotation.x = Math.PI;
+      rocketGroup.add(fire);
+
+      const fireCoreMat = new THREE.MeshBasicMaterial({
+        color: 0xffffcc, transparent: true, opacity: 0.9
+      });
+      const fireCoreGeo = new THREE.ConeGeometry(0.15, 1.2, 16, 1, true);
+      const fireCore = new THREE.Mesh(fireCoreGeo, fireCoreMat);
+      fireCore.position.y = -2.5;
+      fireCore.rotation.x = Math.PI;
+      rocketGroup.add(fireCore);
+
+      // Fire glow (point light following rocket)
+      const fireGlow = new THREE.PointLight(0xff6622, 2, 8);
+      fireGlow.position.y = -2.5;
+      rocketGroup.add(fireGlow);
+
+      rocketGroup.scale.set(1.0, 1.0, 1.0); // full original size
+      scene.add(rocketGroup);
+
+      // ---- ORBITAL ANIMATION ----
+      let orbitAngle = Math.PI;
+      const orbitSpeed = 0.0078;
+      const particleContainer = document.body;
+      let frameCount = 0;
+
+      function spawnFireParticle(screenX, screenY, travelAngle) {
+        const p = document.createElement('div');
+        p.className = 'fire-particle';
+
+        // Flame dimensions: tall & narrow teardrop
+        const w = 6 + Math.random() * 8;
+        const h = w * (1.8 + Math.random() * 1.2);
+
+        // Color: mix of hot white cores, orange mids, red outers
+        const roll = Math.random();
+        let gradient;
+        if (roll < 0.25) {
+          // Hot white-yellow core flame
+          gradient = 'radial-gradient(ellipse at 50% 70%, #fffbe6 0%, #ffdd44 30%, #ff8800 65%, rgba(255,60,0,0) 100%)';
+        } else if (roll < 0.6) {
+          // Orange flame
+          gradient = 'radial-gradient(ellipse at 50% 70%, #ffcc33 0%, #ff8800 35%, #ff4400 70%, rgba(200,30,0,0) 100%)';
+        } else {
+          // Red-orange outer flame
+          gradient = 'radial-gradient(ellipse at 50% 70%, #ffaa22 0%, #ff5500 40%, #cc2200 75%, rgba(150,0,0,0) 100%)';
+        }
+
+        const life = 400 + Math.random() * 700;
+
+        // Point flame away from travel direction
+        const emitAngleDeg = travelAngle + 180 + (Math.random() - 0.5) * 40;
+        const emitAngleRad = emitAngleDeg * Math.PI / 180;
+        const speed = 2 + Math.random() * 3.5;
+
+        p.style.cssText = `
+      left: ${screenX - w / 2}px; top: ${screenY - h / 2}px;
+      width: ${w}px; height: ${h}px;
+      background: ${gradient};
+      --rot: ${emitAngleDeg + 90}deg;
+      transform: rotate(${emitAngleDeg + 90}deg);
+      box-shadow: 0 0 ${w}px rgba(255,120,0,0.5), 0 0 ${w * 2}px rgba(255,80,0,0.2);
+      opacity: 1; transition: opacity ${life}ms ease-out;
+    `;
+        particleContainer.appendChild(p);
+
+        let px = screenX - w / 2, py = screenY - h / 2;
+        const vx = Math.cos(emitAngleRad) * speed;
+        const vy = Math.sin(emitAngleRad) * speed;
+        let frame = 0;
+        const maxFrames = life / 16;
+        function move() {
+          px += vx; py += vy;
+          p.style.left = px + 'px'; p.style.top = py + 'px';
+          frame++;
+          if (frame > 4) p.style.opacity = '0';
+          if (frame < maxFrames) requestAnimationFrame(move);
+          else p.remove();
+        }
+        requestAnimationFrame(move);
+      }
+
+      function animate() {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        // Orbit in normalized coordinates, then convert to 3D world space
+        orbitAngle += orbitSpeed;
+        if (orbitAngle > Math.PI * 2) orbitAngle -= Math.PI * 2;
+
+        // Responsive orbit bounds to prevent going off-screen
+        const fovRad = (50 * Math.PI) / 180;
+        const vhWorld = 2 * Math.tan(fovRad / 2) * 18;
+        const vwWorld = vhWorld * (vw / vh);
+
+        const orbitRx = Math.min(10.5, vwWorld * 0.4);
+        const orbitRy = Math.min(7.05, vhWorld * 0.43); // Shifted up slightly to clear the "4" badge
+        const orbitRz = 3;
+        const yOffset = 1.55; // Adjusted to lock the bottom mathematically at exactly -8.6
+
+        const worldX = Math.cos(orbitAngle) * orbitRx;
+        const worldY = Math.sin(orbitAngle) * orbitRy - yOffset;
+        const worldZ = Math.sin(orbitAngle) * orbitRz;
+
+        rocketGroup.position.set(worldX, worldY, worldZ);
+        
+        // Counteract perspective scaling so it always LOOKS exactly 1.0 unit size!
+        // Camera is at z=18. Perspective scaling factor is distance/18.
+        const distanceToCamera = 18 - worldZ;
+        const antiPerspectiveScale = distanceToCamera / 18;
+        rocketGroup.scale.set(antiPerspectiveScale, antiPerspectiveScale, antiPerspectiveScale);
+
+        // Tangent direction for nose-first flight
+        const tdx = -orbitRx * Math.sin(orbitAngle);
+        const tdy = orbitRy * Math.cos(orbitAngle);
+        const tangent = Math.atan2(tdy, tdx);
+
+        // Rotate rocket: Z rotation for tangent direction, slight bank
+        rocketGroup.rotation.z = tangent - Math.PI / 2;
+        rocketGroup.rotation.x = Math.sin(orbitAngle) * 0.2;
+        rocketGroup.rotation.y = Math.cos(orbitAngle) * 0.3;
+
+        // Depth scale: closer = brighter/bigger fire
+        const depthNorm = (worldZ + orbitRz) / (2 * orbitRz);
+        fire.scale.y = 0.8 + Math.random() * 0.4;
+        fire.scale.x = 0.9 + Math.random() * 0.2;
+        fireCore.scale.y = 0.8 + Math.random() * 0.4;
+        fireGlow.intensity = 1.5 + depthNorm * 2;
+
+        // Spawn DOM particles at nozzle screen position
+        frameCount++;
+        if (frameCount % 3 === 0) {
+          // Get nozzle world position
+          const nozzleWorld = new THREE.Vector3(0, -2.8, 0);
+          rocketGroup.localToWorld(nozzleWorld);
+          // Project to screen
+          nozzleWorld.project(camera);
+          const sx = (nozzleWorld.x * 0.5 + 0.5) * vw;
+          const sy = (-nozzleWorld.y * 0.5 + 0.5) * vh;
+          const travelDeg = tangent * (180 / Math.PI) + 90;
+          spawnFireParticle(sx, sy, travelDeg);
+          if (Math.random() > 0.3) spawnFireParticle(sx + (Math.random() - 0.5) * 10, sy + (Math.random() - 0.5) * 10, travelDeg);
+        }
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+
+      // Handle resize
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      setTimeout(animate, 500);
+    })();
+
+    /* ═══════════════════════════════════════
+       SUBTLE PARALLAX ON MOUSE MOVE
+       ═══════════════════════════════════════ */
+    (function () {
+      const planets = document.querySelectorAll('.planet');
+      const nebulae = document.querySelectorAll('.nebula');
+
+      let mouseX = 0, mouseY = 0;
+      let smoothX = 0, smoothY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      function updateParallax() {
+        smoothX += (mouseX - smoothX) * 0.05;
+        smoothY += (mouseY - smoothY) * 0.05;
+
+        planets.forEach((p, i) => {
+          const depth = 5 + i * 3;
+          p.style.transform = `translate(${smoothX * depth}px, ${smoothY * depth}px)`;
+        });
+
+        nebulae.forEach((n, i) => {
+          const depth = 3 + i * 2;
+          const existing = n.style.animation;
+          n.style.marginLeft = `${smoothX * depth}px`;
+          n.style.marginTop = `${smoothY * depth}px`;
+        });
+
+        requestAnimationFrame(updateParallax);
+      }
+      updateParallax();
+    })();
+
+    /* ═══════════════════════════════════════
+       TOUCH / MOBILE: GYROSCOPE PARALLAX
+       ═══════════════════════════════════════ */
+    if (window.DeviceOrientationEvent && 'ontouchstart' in window) {
+      window.addEventListener('deviceorientation', (e) => {
+        const x = (e.gamma || 0) / 45; // -1 to 1
+        const y = (e.beta || 0) / 45;
+
+        const planets = document.querySelectorAll('.planet');
+        planets.forEach((p, i) => {
+          const depth = 3 + i * 2;
+          p.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>
