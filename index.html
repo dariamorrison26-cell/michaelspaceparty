@@ -634,65 +634,135 @@
     /* ═══════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════ */
+    /* ═══════════════════════════════════════
+       MOBILE — CLEAN & READABLE
+       ═══════════════════════════════════════ */
     @media (max-width: 600px) {
+
+      /* -- Content layout -- */
       .content-wrapper {
-        padding: 60px 20px 40px;
+        padding: 50px 20px 40px;
+        justify-content: center;
+        min-height: 100vh;
+        z-index: 10;
       }
 
+      /* Remove the height-based scaling that shrinks text */
+      @media (max-height: 850px) {
+        .content-wrapper { transform: none; }
+      }
+      @media (max-height: 650px) {
+        .content-wrapper { transform: none; }
+      }
+      @media (max-height: 500px) {
+        .content-wrapper { transform: none; }
+      }
+
+      /* -- Age badge -- */
       .age-badge {
-        width: 64px;
-        height: 64px;
-        font-size: 28px;
+        width: 60px;
+        height: 60px;
+        font-size: 26px;
+        margin-bottom: 18px;
       }
 
+      /* -- Typography — readable on small screens -- */
       .pre-heading {
-        font-size: 12px;
+        font-size: 11px;
         letter-spacing: 3px;
+        margin-bottom: 10px;
       }
 
-      .cta-button {
-        padding: 16px 32px;
+      h1 {
+        font-size: 32px;
+        margin-bottom: 6px;
+      }
+
+      .heading-accent {
+        font-size: 40px;
+      }
+
+      .subheading {
         font-size: 15px;
+        line-height: 1.5;
+        margin: 6px auto 6px;
+        max-width: 320px;
+        color: rgba(220, 230, 245, 0.85);
       }
 
-      .planet-large {
-        width: 180px;
-        height: 180px;
-        bottom: -40px;
-        left: -60px;
-      }
-
-      .planet-small {
-        width: 35px;
-        height: 35px;
-        top: 10%;
-        right: 5%;
-      }
-
-      .moon {
-        width: 25px;
-        height: 25px;
-        top: 18%;
-        left: 8%;
-      }
-
+      /* -- Event details — stack vertically -- */
       .event-details {
-        gap: 8px 16px;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        margin: 14px 0 20px;
       }
 
       .detail-chip {
         font-size: 13px;
-        padding: 6px 14px;
+        padding: 8px 18px;
+        width: fit-content;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
       }
+
+      /* -- CTA button -- */
+      .cta-button {
+        padding: 16px 32px;
+        font-size: 15px;
+        letter-spacing: 1px;
+      }
+
+      /* -- PLANETS: hide all except Saturn & Jupiter -- */
+      .planet-moon,
+      .planet-mars,
+      .planet-earth,
+      .planet-venus {
+        display: none !important;
+      }
+
+      /* Saturn — small, subtle, bottom-left corner deco */
+      .planet-saturn {
+        width: 180px;
+        bottom: -30px;
+        left: -20px;
+        opacity: 0.5;
+      }
+
+      /* Jupiter — small, top-right corner */
+      .planet-jupiter {
+        display: block !important;
+        width: 130px !important;
+        top: -10px !important;
+        right: -15px !important;
+        left: auto !important;
+        opacity: 0.6 !important;
+        z-index: 6;
+      }
+
+      /* Tone down nebulas on mobile */
+      .nebula { opacity: 0.06; }
     }
 
     @media (max-width: 380px) {
       h1 {
-        font-size: 32px;
+        font-size: 28px;
       }
 
       .heading-accent {
-        font-size: 38px;
+        font-size: 34px;
+      }
+
+      .subheading {
+        font-size: 14px;
+        max-width: 280px;
+      }
+
+      .cta-button {
+        padding: 14px 28px;
+        font-size: 14px;
       }
     }
 
